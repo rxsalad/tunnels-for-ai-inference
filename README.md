@@ -84,7 +84,7 @@ After the tunnel is configured, we need to download the token that will be used 
 
 ### Deploy cloudflared connectors in Kubernetes
 
-Create the [tunnel.yaml](V1/tunnel.yaml) manifest using Cloudflare's [the pre-built images](https://hub.docker.com/r/cloudflare/cloudflared/tags) and deploy 3 connector instances, which can be managed remotely through the Cloudflare dashboard, for example, to adjust routing configuration.
+Create the [tunnel.yaml](V1/tunnel.yaml) manifest using Cloudflare's [pre-built images](https://hub.docker.com/r/cloudflare/cloudflared/tags) and deploy 3 connector instances, which can be managed remotely through the Cloudflare dashboard, for example, to adjust routing configuration.
 
 ``` yaml 
 apiVersion: v1
@@ -148,7 +148,7 @@ The connectors do not require access to GPU resources and can run on either GPU 
 
 ### Deploy vLLM servers in Kubernetes
 
-Create the [vllm-server](V1/vllm-server.yaml) manifest using AMD's [the pre-built vLLM images](https://hub.docker.com/r/rocm/vllm/tags) and deploy 2 instances for `meta-llama/Llama-3.1-8B-Instruct`.
+Create the [vllm-server](V1/vllm-server.yaml) manifest using AMD's [pre-built vLLM images](https://hub.docker.com/r/rocm/vllm/tags) and deploy 2 instances serving the `meta-llama/Llama-3.1-8B-Instruct` model.
 
 ### Verify the Kubernetes cluster status
 
@@ -215,7 +215,7 @@ CF-RAY: 9b4b1e9e6a4ecfe1-SJC
 alt-svc: h3=":443"; ma=86400
 ```
 
-Test using the internal DNS name from within a vLLM server:
+Test using the internal Kubernetes DNS name from within a vLLM server:
 
 ``` shell
 curl http://vllm-service.default.svc.cluster.local:8000/v1/chat/completions -H "Content-Type: application/json"   -d '{
