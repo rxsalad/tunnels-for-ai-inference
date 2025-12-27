@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: hf-token-secret
+type: Opaque
+stringData:
+  HF_TOKEN: <HUGGING_FACE_TOKEN_FOR_GATED_MODEL>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm-service
+spec:
+  type: ClusterIP
+  selector:
+    app: vllm
+  ports:
+    - port: 8000
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-server
+  labels:
+    app: vllm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vllm
+  template:
+    metadata:
+      labels:
+        app: vllm
+    spec:
+      hostIPC: true
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - key: amd.com/gpu
+        operator: Exists
+        effect: NoSchedule
+      containers:
+        - name: vllm-rocm
+          image: rocm/vllm:rocm7.0.0_vllm_0.11.1_20251103
+          ports:
+            - containerPort: 8000
+          command: 
+          - bash
+          - -c
+          - |
+            LLM_USE_V1=1 vllm serve $MODEL \
+             --enforce-eager \
+             --host 0.0.0.0 \
+             --port 8000 \
+             --tensor-parallel-size 1 \
+             --seed 1024 \
+             --dtype float16 \
+             --max-model-len 10000 \
+             --max-num-batched-tokens 10000 \
+             --max-num-seqs 256 \
+             --trust-remote-code \
+             --gpu-memory-utilization 0.9
+          env:
+            - name: HF_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: hf-token-secret
+                  key: HF_TOKEN
+            - name: MODEL
+              value: meta-llama/Llama-3.1-8B-Instruct
+          resources:
+            limits:
+              amd.com/gpu: 1
+          volumeMounts:
+          - name: temp-hf-cache
+            mountPath: /root/.cache/huggingface
+          - name: shm
+            mountPath: /dev/shm
+          - name: dev-kfd
+            mountPath: /dev/kfd
+          - name: dev-dri
+            mountPath: /dev/dri
+          securityContext:  # Container level
+            capabilities:
+              add:
+              - SYS_PTRACE
+            seccompProfile:
+              type: Unconfined
+      securityContext:
+        supplementalGroups:  # Pod level
+        - 44
+      volumes:
+      - name: temp-hf-cache
+        hostPath:
+          path: /root/.cache/huggingface
+          type: DirectoryOrCreate
+      - name: shm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 128Gi
+      - name: dev-kfd
+        hostPath:
+          path: /dev/kfd
+      - name: dev-dri
+        hostPath:
+          path: /dev/dri
