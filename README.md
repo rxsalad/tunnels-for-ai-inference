@@ -167,6 +167,29 @@ tunnel-859d654cbc-gp5t8        1/1     Running   0          8h      10.108.1.64 
 tunnel-859d654cbc-kvjd9        1/1     Running   0          8h      10.108.0.218   rs-mi325-5euw6  
 vllm-server-84fb5bd765-bph88   1/1     Running   0          9h      10.108.0.198   rs-mi325-5euw6   
 vllm-server-84fb5bd765-s2nqn   1/1     Running   0          7h52m   10.108.1.47    rs-mi325-5euwa  
+
+kubectl get svc
+NAME           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+kubernetes     ClusterIP   10.109.0.1      <none>        443/TCP    2d2h
+vllm-service   ClusterIP   10.109.22.165   <none>        8000/TCP   29h
+
+kubectl describe svc vllm-service
+Name:                     vllm-service
+Namespace:                default
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=vllm
+Type:                     ClusterIP
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.109.22.165
+IPs:                      10.109.22.165
+Port:                     <unset>  8000/TCP
+TargetPort:               8000/TCP
+Endpoints:                10.108.0.198:8000,10.108.1.47:8000
+Session Affinity:         None
+Internal Traffic Policy:  Cluster
+Events:                   <none>
 ```
 
 ### Verify the connector status in Cloudflare
