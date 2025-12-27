@@ -35,16 +35,13 @@ According to [the documentation](https://developers.cloudflare.com/learning-path
 [Cloudflare load balancers](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/configure-tunnels/tunnel-availability/#cloudflare-load-balancers) can also be used to distribute traffic across multiple tunnels, which is useful for application migration or steering traffic among multiple data centers.
 
 
-**This solution offers several key benefits:**
+**The tunnel-based solution offers several key benefits:**
 
-- First, it eliminates the need to expose private services directly to the Internet, reducing the attack surface and avoiding inbound firewall rules or public load balancers.
+- First, it eliminates the need to expose private services directly to the Internet from the Kubernetes cluster, reducing the attack surface and avoiding inbound firewall rules or public load balancers.
 
 - Second, it decouples application access from the underlying infrastructure. Services can be relocated, scaled, or replaced without requiring changes to public endpoints.
 
-- Third, by running multiple cloudflared connector instances, the tunnel provides high availability and resilience against individual connector failures.
-
 - Finally, by offloading TLS termination and certificates, DDoS protection, access control, and request logging to Cloudflare-managed services, it significantly simplifies the design and operation of the AI inference infrastructure.
-
 
 ## Proof of Concept
 
