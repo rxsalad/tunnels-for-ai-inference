@@ -192,6 +192,20 @@ curl https://llm.rshue.com/v1/chat/completions -H "Content-Type: application/jso
 {"id":"chatcmpl-4361fcdf54684bfe9ea0035c54a88858","object":"chat.completion","created":1766862595,"model":"meta-llama/Llama-3.1-8B-Instruct","choices":[{"index":0,"message":{"role":"assistant","content":"I'm functioning properly. What can I help with?","refusal":null,"annotations":null,"audio":null,"function_call":null,"tool_calls":[],"reasoning_content":null},"logprobs":null,"finish_reason":"stop","stop_reason":null,"token_ids":null}],"service_tier":null,"system_fingerprint":null,"usage":{"prompt_tokens":39,"total_tokens":51,"completion_tokens":12,"prompt_tokens_details":null},"prompt_logprobs":null,"prompt_token_ids":null,"kv_transfer_params":null}
 ```
 
+``` shell
+curl -i https://llm.rshue.com/health
+
+HTTP/2 200 
+date: Sat, 27 Dec 2025 22:40:47 GMT
+content-length: 0
+server: cloudflare
+cf-cache-status: DYNAMIC
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=bs1OwuOUYUwL17RryMbuuG022bvQAuKoG0pQcmoBtb1wsLrpXEBhW8DmJCVx1ESdgcrMviANblTqlJd79oanP%2BkYFNJFiASWzvn6DQ0%3D"}]}
+cf-ray: 9b4c52571816ac8f-ATL
+alt-svc: h3=":443"; ma=86400
+```
+
 Test through the public endpoint (HTTP):
 
 ``` shell
