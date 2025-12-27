@@ -65,7 +65,7 @@ Now we can create a [remotely-managed tunnel](https://developers.cloudflare.com/
 
 <img src="images/tunnel-creation.png" alt="creation" width="600" height="220"/>
 
-Next, we define the route to map the public endpoint name (subdomian and path) to the corresponding private services:
+Next, we define the route to map the public endpoint name (subdomain and path) to the corresponding private services:
 
 ```
 https://llm.rshue.com -> http://vllm-service.default.svc.cluster.local:8000
